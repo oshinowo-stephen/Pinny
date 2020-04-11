@@ -13,7 +13,7 @@ export default new SettingCommand<Pinny>({
     permission: pinVip
   },
   getValue: async (bot, { msg }) => {
-    const pinRole = await bot.pinManager.getPinSetting(
+    const pinRole: string | null = await bot.pinManager.getPinSetting(
       msg.channel.guild.id,
       'pinRole'
     )
@@ -22,7 +22,7 @@ export default new SettingCommand<Pinny>({
 
     return pinRole === null
       ? 'N/A'
-      : pinRole
+      : `<@&${pinRole}>`
   },
   run: async (bot, { params, msg }) => {
     const role = msg.channel.guild.roles.get(params[0])
@@ -41,6 +41,6 @@ export default new SettingCommand<Pinny>({
       return `Role : <@#${params[0]}> is invalid`
     }
 
-    return `New ***Pinner Emote*** set to ${params[0]}`
+    return `New ***Pinner Role*** set to <@&${params[0]}>`
   }
 })

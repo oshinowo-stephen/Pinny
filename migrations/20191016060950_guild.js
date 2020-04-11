@@ -12,6 +12,7 @@ exports.up = (knex) => {
       .defaultTo('📌')
       .notNull()
     t.string('pinLog')
+      .defaultTo(null)
   })
 }
 

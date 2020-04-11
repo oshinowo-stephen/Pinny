@@ -1,11 +1,15 @@
 import { DatabaseManager } from 'eris-boiler'
-import { GuildTextableChannel, Guild, TextChannel } from 'eris'
+import { GuildTextableChannel } from 'eris'
 
 import Pinny from './pinny'
 
 export interface PinManagerResult {
   pinned: boolean
   reason: string
+}
+
+export interface PinLogData {
+  message: string
 }
 
 export default class PinManager {
@@ -17,10 +21,57 @@ export default class PinManager {
     this.dbm = bot.dbm
   }
 
+  private async sendToLog (guild: string, data: PinLogData): Promise<void> {
+    const pinLog = await this.getPinSetting(guild, 'pinLog')
+
+    console.log(pinLog)
+
+    if (pinLog !== undefined && pinLog !== null) {
+      console.log('send to log...')
+
+      try {
+        const g = this.bot.guilds.get(guild)
+
+        if (g !== undefined) {
+          const plog = g.channels.get(pinLog)
+
+          if (plog !== undefined) {
+            console.log('creating message...')
+
+            await plog.createMessage({
+              embed: {
+                title: '📌📃 Pin Log',
+                description: data.message
+              }
+            })
+          }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
+
+  async removePin (channel: string, message: string): Promise<void> {
+    const query = await this.dbm.newQuery('pins').get(message)
+
+    try {
+      console.log(channel, message)
+
+      await this.bot.unpinMessage(channel, message)
+    } catch (error) {
+      console.log(error)
+    }
+
+    await query?.delete()
+  }
+
   async pinMessage (channel: GuildTextableChannel, messageId: string): Promise<void> {
     const query = await this.dbm.newQuery('pins').get(channel.guild.id)
 
     await this.bot.pinMessage(channel.id, messageId)
+
+    await this.sendToLog(channel.guild.id, { message: messageId })
 
     await query?.save({
       id: this.generatePinId(),
@@ -66,22 +117,6 @@ export default class PinManager {
     }
 
     return `:white_check_mark: New ${setting} successfully set!`
-  }
-
-  async reportPinLog (guild: Guild | undefined, message: string): Promise<void> {
-    if (guild === undefined) return
-
-    const pinLog = await this.getPinSetting(
-      guild.id,
-      'pinLog'
-    )
-
-    if (pinLog !== undefined) {
-      const channel = guild.channels.get(pinLog)
-      if (channel !== undefined && channel instanceof TextChannel) {
-        await channel.createMessage(message)
-      }
-    }
   }
 
   private generatePinId (): string {

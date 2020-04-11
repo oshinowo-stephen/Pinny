@@ -8,10 +8,8 @@ import {
 import { DataClient } from 'eris-boiler'
 
 import PinManager from './pinManager'
-import PinCache from './pinCache'
 
 export default class Pinny extends DataClient {
-  public readonly pinCache = new PinCache(this)
   public readonly pinManager = new PinManager(this)
 }
 
