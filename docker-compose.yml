@@ -1,0 +1,17 @@
+version: '3'
+services:
+	database:
+		image: postgres
+		environment:
+			DATABASE_PASS: DATABASE_PASS=${DATABASE_PASS}
+			DATABASE_USER: DATABASE_USER=${DATABASE_USER}
+			DATABASE_NAME: DATABASE_NAME=${DATABASE_NAME}
+		volumes: 
+			- ./pinny-data:/var/lib/postgresql/data
+		ports:
+			- '5432:5432'
+	pinny:
+		image: pinny
+		dockerfile: ./Dockerfile
+		depends_on: 
+			- database
