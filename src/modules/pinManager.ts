@@ -1,15 +1,11 @@
 import { DatabaseManager } from 'eris-boiler'
-import { GuildTextableChannel } from 'eris'
+import { GuildTextableChannel, Message } from 'eris'
 
 import Pinny from './pinny'
 
 export interface PinManagerResult {
   pinned: boolean
   reason: string
-}
-
-export interface PinLogData {
-  message: string
 }
 
 export default class PinManager {
@@ -21,27 +17,29 @@ export default class PinManager {
     this.dbm = bot.dbm
   }
 
-  private async sendToLog (guild: string, data: PinLogData): Promise<void> {
+  private async sendToLog (guild: string, message: Message, action: string): Promise<void> {
     const pinLog = await this.getPinSetting(guild, 'pinLog')
 
-    console.log(pinLog)
-
     if (pinLog !== undefined && pinLog !== null) {
-      console.log('send to log...')
-
       try {
         const g = this.bot.guilds.get(guild)
 
         if (g !== undefined) {
           const plog = g.channels.get(pinLog)
 
-          if (plog !== undefined) {
-            console.log('creating message...')
-
+          if (plog !== undefined && plog.type === 0) {
             await plog.createMessage({
               embed: {
                 title: '📌📃 Pin Log',
-                description: data.message
+                fields: [{
+                  name: 'Message',
+                  value: message.content,
+                  inline: true
+                }, {
+                  name: 'Pin Action',
+                  value: action,
+                  inline: true
+                }]
               }
             })
           }
@@ -52,13 +50,17 @@ export default class PinManager {
     }
   }
 
-  async removePin (channel: string, message: string): Promise<void> {
+  async removePin (channel: GuildTextableChannel, message: string): Promise<void> {
     const query = await this.dbm.newQuery('pins').get(message)
 
-    try {
-      console.log(channel, message)
+    const msg = channel.messages.get(message)
 
-      await this.bot.unpinMessage(channel, message)
+    try {
+      if (msg !== undefined) {
+        await this.sendToLog(channel.guild.id, msg, 'removed')
+      }
+
+      await this.bot.unpinMessage(channel.id, message)
     } catch (error) {
       console.log(error)
     }
@@ -71,7 +73,11 @@ export default class PinManager {
 
     await this.bot.pinMessage(channel.id, messageId)
 
-    await this.sendToLog(channel.guild.id, { message: messageId })
+    const message = channel.messages.get(messageId)
+
+    if (message !== undefined) {
+      await this.sendToLog(channel.guild.id, message, 'pinned')
+    }
 
     await query?.save({
       id: this.generatePinId(),

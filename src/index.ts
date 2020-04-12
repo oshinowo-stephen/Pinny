@@ -6,6 +6,8 @@ import './utils/envLoader'
 import Pinny, { PINNY_TOKEN, PINNY_DB_URL } from './modules/pinny'
 import { error } from 'eris-boiler/util/logger'
 
+console.log(PINNY_TOKEN)
+
 const client = new Pinny(PINNY_TOKEN, {
   oratorOptions: {
     defaultPrefix: 'p!'

@@ -1,15 +1,18 @@
-FROM node:13-alpine3.10 AS builder
+FROM node:12-alpine AS builder
 
 WORKDIR /node/src/app
 
 COPY src .
 COPY migrations .
 COPY package.json .
+COPY tsconfig.json .
+
+RUN apk add --update git
 
 RUN npm install
-RUN npm run build
+RUN npm run stage:build
 
-RUN alpine
+FROM alpine
 
 WORKDIR /pinny
 COPY --from=builder /node/src/app /pinny/

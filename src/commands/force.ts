@@ -26,7 +26,7 @@ export default new GuildCommand<Pinny>({
           }
 
           try {
-            await bot.pinManager.removePin(msg.channel.id, params[0])
+            await bot.pinManager.removePin(msg.channel, params[0])
           } catch (error) {
             return errorReport(error.toString())
           }

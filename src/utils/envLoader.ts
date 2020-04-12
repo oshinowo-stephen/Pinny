@@ -1,4 +1,13 @@
-import { config } from 'dotenv'
 import { join } from 'path'
+import { load } from 'docker-secret-env'
+import { config, DotenvConfigOutput } from 'dotenv'
 
-export default config({ path: join(__dirname, '../../.env') })
+const loader = (): DotenvConfigOutput | void => {
+  if (process.env.NODE_ENV === 'production') {
+    return load()
+  } else {
+    return config({ path: join(__dirname, '../../.env') })
+  }
+}
+
+export default loader()

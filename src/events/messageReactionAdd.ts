@@ -16,12 +16,8 @@ export default new DiscordEvent<Pinny>({
       'pinMoji'
     )
 
-    console.log(pinmoji, emoji.name)
-
     if (pinmoji === emoji.name) {
-      console.log(message.reactions, emoteThresh)
       if (message.reactions[pinmoji].count === emoteThresh) {
-        console.log('adding pin...')
         try {
           await bot.pinManager.pinMessage(message.channel, message.id)
         } catch (error) {

@@ -5,6 +5,7 @@ import Pinny from '../modules/pinny'
 export default new DiscordEvent<Pinny>({
   name: 'messageReactionRemove',
   run: async (bot, message, emoji) => {
+    console.log(message)
     if (message === undefined || message.reactions === undefined) return
 
     const emoteThresh = await bot.pinManager.getPinSetting(
@@ -16,14 +17,10 @@ export default new DiscordEvent<Pinny>({
       'pinMoji'
     )
 
-    console.log(pinmoji, emoji.name)
-
     if (pinmoji === emoji.name) {
-      console.log(message.reactions, emoteThresh)
       if (message.reactions[pinmoji].count < emoteThresh) {
-        console.log('removing pin...')
         try {
-          await bot.pinManager.removePin(message.channel.id, message.id)
+          await bot.pinManager.removePin(message.channel, message.id)
         } catch (error) {
           console.log(error)
 

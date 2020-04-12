@@ -6,13 +6,14 @@
   "license": "MIT",
   "scripts": {
     "dev:start": "ts-node-dev src/index.ts",
-    "dev:boiler": "eris-boiler",
-    "stage:build": "tsc",
+    "stage:migrate": "eris-boiler migrations latest",
+    "stage:build": "tsc -b --verbose",
     "stage:eslint": "eslint src --ext ts"
   },
   "devDependencies": {
     "@types/node": "^13.11.1",
     "@typescript-eslint/eslint-plugin": "2",
+    "docker-secret-env": "^0.2.1",
     "dotenv": "^8.2.0",
     "eslint": "6",
     "eslint-config-standard-with-typescript": "^15.0.1",
@@ -28,8 +29,9 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
+    "core-js": "3",
     "eris": "^0.11.2",
-    "eris-boiler": "github:alex-taxiera/eris-boiler#release/3.0.0"
+    "eris-boiler": "^3.0.0"
   },
   "keywords": [],
   "description": ""
