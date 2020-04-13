@@ -13,4 +13,4 @@ RUN apk add --update git
 RUN npm install
 RUN npm run stage:build
 
-CMD [ "npm", "run stage:start" ]
+CMD [ "npm", "start" ]

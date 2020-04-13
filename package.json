@@ -8,7 +8,8 @@
     "dev:start": "ts-node-dev src/index.ts",
     "stage:migrate": "eris-boiler migrations latest",
     "stage:build": "tsc -b --verbose",
-    "stage:start": "npm run stage:migrate ; node dist/index.js",
+    "prestart": "npm run stage:migrate",
+    "start": "node dist/index.js",
     "stage:eslint": "eslint src --ext ts"
   },
   "devDependencies": {
