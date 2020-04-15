@@ -6,11 +6,11 @@ Pinny, counts as a utility bot that can pin messages! Basically...
 
 Well as stated before it can pin messages, but only when the message gets enough PinMojis, example on usage is shown below...
 
-![The image isn't loading](https://i.imgur.com/l3OtlmN.gifv)
+![The image isn't loading](https://github.com/whoastonic/Pinny/tree/master/assets/images/create.gif)
 
 When the threshold arrives Pinny will pin the message! But when ever the message doesn't meet the threshold, it'll get unpinned, as shown below:
 
-![The image isn't loading](https://i.imgur.com/r8GYW42.gifv)
+![The image isn't loading](https://github.com/whoastonic/Pinny/tree/master/assets/images/remove.gif)
 
 You can force add & remove pins with the following commands:
 
