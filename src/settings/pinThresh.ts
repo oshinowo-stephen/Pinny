@@ -15,7 +15,7 @@ export default new SettingCommand<Pinny>({
   getValue: async (bot, { msg }) => {
     const pinThresh = await bot.pinManager.getPinSetting(
       msg.channel.guild.id,
-      'emoteThresh'
+      'thresh'
     )
 
     console.log(pinThresh)
@@ -31,7 +31,7 @@ export default new SettingCommand<Pinny>({
 
     await bot.pinManager.setPinSetting(
       msg.channel.guild.id,
-      'emoteThresh',
+      'thresh',
       thresh
     )
 

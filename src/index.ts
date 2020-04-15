@@ -3,8 +3,10 @@ import { SQLManager } from 'eris-boiler'
 import { join } from 'path'
 import './utils/envLoader'
 
-import Pinny, { PINNY_TOKEN, PINNY_DB_URL } from './modules/pinny'
+import Pinny, { PINNY_TOKEN, SQLMOpts } from './modules/pinny'
 import { error } from 'eris-boiler/util/logger'
+
+console.log(SQLMOpts)
 
 const client = new Pinny(PINNY_TOKEN, {
   oratorOptions: {
@@ -16,10 +18,7 @@ const client = new Pinny(PINNY_TOKEN, {
       name: 'with pushpins...'
     }
   },
-  databaseManager: new SQLManager({
-    client: 'postgres',
-    connectionInfo: PINNY_DB_URL
-  })
+  databaseManager: new SQLManager(SQLMOpts)
 })
 
 client

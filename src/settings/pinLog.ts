@@ -11,9 +11,9 @@ export default new SettingCommand<Pinny>({
   description: 'Sets the pin log for the server',
   displayName: 'Pin Log',
   getValue: async (bot, { msg: { channel: { guild } } }) => {
-    const pinLog: string = await bot.pinManager.getPinSetting(guild.id, 'pinLog')
+    const pinLog: string = await bot.pinManager.getPinSetting(guild.id, 'pin_log')
 
-    return pinLog === null || pinLog === undefined
+    return pinLog === null
       ? 'N/A'
       : `<#${pinLog}>`
   },
@@ -27,7 +27,7 @@ export default new SettingCommand<Pinny>({
     try {
       await bot.pinManager.setPinSetting(
         msg.channel.guild.id,
-        'pinLog',
+        'pin_log',
         channel
       )
     } catch (error) {

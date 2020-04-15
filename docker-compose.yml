@@ -3,9 +3,9 @@ services:
   database:
     image: postgres
     environment: 
-      POSTGRES_PASSWORD: postgres 
-      POSTGRES_USER: postgres
-      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: pgpass12
+      POSTGRES_USER: pguser
+      POSTGRES_DB: pgdb
     volumes:
       - ./pinny-data:/var/lib/postgresql/data
     ports:
@@ -15,7 +15,10 @@ services:
     environment: 
       TOKEN: ${TOKEN}
       DB_CLIENT: ${DB_CLIENT}
-      CONN_STRING: ${CONN_STRING}    
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_NAME: ${DB_NAME}
+      DB_HOST: ${DB_HOST}   
     depends_on: 
       - database
     build: .

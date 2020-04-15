@@ -103,6 +103,9 @@ dist/
 # DynamoDB Local files
 .dynamodb/
 
+# Ignored Files / Dir
+pinny-data/
+
 # Temporary folders
 tmp/
 temp/

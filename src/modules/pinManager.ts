@@ -2,10 +2,12 @@ import { DatabaseManager } from 'eris-boiler'
 import { GuildTextableChannel, Message } from 'eris'
 
 import Pinny from './pinny'
+import { errorReport } from '../utils/extras'
 
-export interface PinManagerResult {
-  pinned: boolean
-  reason: string
+export interface PinnedMessage {
+  message: boolean
+  pinnedIn: string
+  pinnedAt: number
 }
 
 export default class PinManager {
@@ -18,7 +20,7 @@ export default class PinManager {
   }
 
   private async sendToLog (guild: string, message: Message, action: string): Promise<void> {
-    const pinLog = await this.getPinSetting(guild, 'pinLog')
+    const pinLog = await this.getPinSetting(guild, 'pin_log')
 
     if (pinLog !== undefined && pinLog !== null) {
       try {
@@ -53,49 +55,67 @@ export default class PinManager {
   async removePin (channel: GuildTextableChannel, message: string): Promise<void> {
     const query = await this.dbm.newQuery('pins').get(message)
 
-    const msg = channel.messages.get(message)
+    console.log(query)
 
-    try {
-      if (msg !== undefined) {
-        await this.sendToLog(channel.guild.id, msg, 'removed')
+    if (query !== undefined) {
+      console.log('actually removing a pin')
+
+      const msg = channel.messages.get(message)
+
+      try {
+        if (msg !== undefined) {
+          await this.sendToLog(channel.guild.id, msg, 'removed')
+        }
+
+        await this.bot.unpinMessage(channel.id, message)
+      } catch (error) {
+        console.log(error)
       }
 
-      await this.bot.unpinMessage(channel.id, message)
-    } catch (error) {
-      console.log(error)
+      await query.delete()
     }
-
-    await query?.delete()
   }
 
-  async pinMessage (channel: GuildTextableChannel, messageId: string): Promise<void> {
-    const query = await this.dbm.newQuery('pins').get(channel.guild.id)
+  async getPinMessage (message: string): Promise<PinnedMessage | void> {
+    const query = await this.dbm.newQuery('pins').get(message)
 
-    await this.bot.pinMessage(channel.id, messageId)
-
-    const message = channel.messages.get(messageId)
-
-    if (message !== undefined) {
-      await this.sendToLog(channel.guild.id, message, 'pinned')
+    if (query !== undefined) {
+      return {
+        message: query.get('id'),
+        pinnedAt: query.get('pinnedAt'),
+        pinnedIn: query.get('pinnedIn')
+      }
     }
+  }
 
-    await query?.save({
-      id: this.generatePinId(),
-      message: messageId,
+  async pinMessage (channel: GuildTextableChannel, message: string): Promise<void> {
+    console.log('wow')
+    const newPin = await this.dbm.newObject('pins', {
+      id: message,
       pinnedIn: channel.id,
       pinnedAt: Date.now()
-    })
+    }).save()
+
+    console.log(newPin)
+
+    try {
+      await channel.pinMessage(message)
+    } catch (error) {
+      await newPin.delete()
+
+      errorReport(error)
+    }
   }
 
-  async getPinSetting (guild: string, setting: string): Promise<any> {
+  async getPinSetting (guild: string, setting: string): Promise<string> {
     const query = await this.dbm.newQuery('guild').get(guild)
 
-    const pinSetting = await query?.get(setting)
+    const pinSetting: string = await query?.get(setting)
 
     return pinSetting
   }
 
-  async setPinSetting (guild: string, setting: string, value: string | number): Promise<any> {
+  async setPinSetting (guild: string, setting: string, value: string | number): Promise<string> {
     const query = await this.dbm.newQuery('guild').get(guild)
 
     const currSetting: string | number = await this.getPinSetting(
@@ -111,21 +131,17 @@ export default class PinManager {
       case 'pinRole':
         await query?.save({ pinRole: value })
         break
-      case 'pinMoji':
-        await query?.save({ pinMoji: value })
+      case 'pin_emoji':
+        await query?.save({ pin_emoji: value })
         break
-      case 'pinLog':
-        await query?.save({ pinLog: value })
+      case 'pin_log':
+        await query?.save({ pin_log: value })
         break
-      case 'emoteThresh':
-        await query?.save({ emoteThresh: value })
+      case 'thresh':
+        await query?.save({ thresh: value })
         break
     }
 
     return `:white_check_mark: New ${setting} successfully set!`
-  }
-
-  private generatePinId (): string {
-    return Math.random().toString(36).substring(5)
   }
 }
