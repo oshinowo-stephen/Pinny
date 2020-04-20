@@ -13,7 +13,7 @@
     "stage:eslint": "eslint src --ext ts"
   },
   "devDependencies": {
-    "@types/node": "13.11.1",
+    "@types/node": "13.13.1",
     "@typescript-eslint/eslint-plugin": "2.27.0",
     "docker-secret-env": "0.2.1",
     "dotenv": "8.2.0",
