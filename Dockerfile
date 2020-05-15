@@ -1,14 +1,18 @@
 FROM node:12-alpine AS builder
 
-WORKDIR /node/src/app
+WORKDIR /usr/app/pinny
 
-COPY src ./src
-COPY migrations ./migrations
+COPY src/ .
+COPY migrations/ . 
 COPY knexfile.js .
 COPY package.json .
 COPY tsconfig.json .
 
-RUN apk add --update git
+FROM alpine
+
+WORKDIR /usr/app/pinny
+
+RUN apk add --update nodejs npm git
 
 RUN npm install
 RUN npm run stage:build

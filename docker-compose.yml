@@ -13,12 +13,12 @@ services:
   pinny:
     image: imstonic/pinny
     environment: 
-      TOKEN: ${TOKEN}
       DB_CLIENT: ${DB_CLIENT}
       DB_USER: ${DB_USER}
       DB_PASS: ${DB_PASS}
       DB_NAME: ${DB_NAME}
       DB_HOST: ${DB_HOST}   
+      TOKEN: ${TOKEN}
     depends_on: 
       - database
     build: .

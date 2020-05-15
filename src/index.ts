@@ -25,5 +25,4 @@ client
   .addCommands(join(__dirname, 'commands'))
   .addEvents(join(__dirname, 'events'))
   .addSettingCommands(join(__dirname, 'settings'))
-  .addPermissions(join(__dirname, 'permissions'))
   .connect().catch((err) => error(err))

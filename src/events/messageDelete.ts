@@ -4,12 +4,5 @@ import Pinny from '../modules/pinny'
 export default new DiscordEvent<Pinny>({
   name: 'messageDelete',
   run: async (bot, msg) => {
-    const query = await bot.dbm.newQuery('pins').get(msg.id)
-
-    if (query !== undefined) {
-      console.log('deleting pin entry...')
-
-      await query.delete()
-    }
   }
 })

@@ -4,7 +4,6 @@ exports.up = (knex) => {
     t.string('id').primary().notNull()
     t.string('prefix').defaultTo(null)
     t.string('vip').defaultTo(null)
-    t.string('pinRole')
     t.integer('thresh')
       .notNull()
       .defaultTo(3)

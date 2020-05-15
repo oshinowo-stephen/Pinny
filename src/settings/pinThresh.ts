@@ -13,28 +13,30 @@ export default new SettingCommand<Pinny>({
     permission: pinVip
   },
   getValue: async (bot, { msg }) => {
-    const pinThresh = await bot.pinManager.getPinSetting(
-      msg.channel.guild.id,
-      'thresh'
-    )
+    const { id: guildID } = msg.channel.guild
 
-    console.log(pinThresh)
+    const {
+      succeeded,
+      message
+    } = await bot.pinSettings.getSetting(guildID, 'thresh')
 
-    return pinThresh
+    return succeeded
+      ? message !== undefined
+        ? message
+        : 'N/A'
+      : 'N/A'
   },
   run: async (bot, { params, msg }) => {
-    const thresh = parseInt(params[0])
+    const { id: guildID } = msg.channel.guild
 
-    if ((isEmpty(params) || params.length > 1) && !isNaN(thresh)) {
-      return 'You\'ll need to provide **a valid** number'
+    if (!isEmpty(params)) {
+      const newThresh = parseInt(params[0])
+
+      if (isNaN(newThresh)) return `Invalid number: ${params[0]}`
+
+      await bot.pinSettings.setSetting(guildID, 'thresh', newThresh)
     }
 
-    await bot.pinManager.setPinSetting(
-      msg.channel.guild.id,
-      'thresh',
-      thresh
-    )
-
-    return `New ***Pinner Threshold*** set to ${params[0]}`
+    return 'I\'ll need a number to define at the new threshold'
   }
 })
