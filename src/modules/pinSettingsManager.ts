@@ -7,7 +7,7 @@ export default class PinSettingManager {
     this.client = client
   }
 
-  async getSetting (guild: string, name: string): PinResult<void> {
+  async getSetting (guild: string, name: string): PinResult<string> {
     const query = await this.client.dbm.newQuery('guild').get(guild)
 
     const data = query?.get(name)
@@ -29,7 +29,7 @@ export default class PinSettingManager {
     guild: string,
     name: string,
     settingData: string | number
-  ): PinResult<void> {
+  ): PinResult<string> {
     const query = await this.client.dbm.newQuery('guild').get(guild)
 
     if (query === undefined) {

@@ -35,6 +35,8 @@ export default new SettingCommand<Pinny>({
       if (isNaN(newThresh)) return `Invalid number: ${params[0]}`
 
       await bot.pinSettings.setSetting(guildID, 'thresh', newThresh)
+
+      return `Set the threshold to: ${params[0]}`
     }
 
     return 'I\'ll need a number to define at the new threshold'
