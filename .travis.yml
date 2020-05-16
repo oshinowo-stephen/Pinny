@@ -2,5 +2,5 @@ language: node
 node: 13
 
 script:
-    - npm run stage:build
-    - npm run stage:eslint
+  - npm run build
+  - npm run eslint

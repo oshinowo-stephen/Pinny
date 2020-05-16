@@ -5,17 +5,15 @@
   "author": "whoastonic <kingstonicthe1@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev:start": "ts-node-dev src/index.ts",
-    "stage:migrate": "eris-boiler migrations latest",
-    "stage:build": "tsc -b --verbose",
-    "prestart": "npm run stage:migrate",
-    "start": "node dist/index.js",
-    "stage:eslint": "eslint src --ext ts"
+    "build": "tsc -b --verbose",
+    "prestart": "npm run migrate",
+    "start": "node dist/index.ts",
+    "eslint": "eslint src --ext ts",
+    "start:dev": "ts-node src/index.ts",
+    "migrate": "eris-boiler migrations latest"
   },
   "devDependencies": {
-    "@types/node": "13.13.1",
     "@typescript-eslint/eslint-plugin": "2.29.0",
-    "docker-secret-env": "0.2.1",
     "dotenv": "8.2.0",
     "eslint": "6.8.0",
     "eslint-config-standard-with-typescript": "15.0.1",
@@ -23,17 +21,19 @@
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "4.2.1",
     "eslint-plugin-standard": "4.0.1",
-    "knex": "0.21.0",
-    "moment": "^2.25.3",
-    "pg": "8.0.2",
-    "simple-knex": "1.0.0-beta.5",
-    "ts-node": "8.9.0",
-    "ts-node-dev": "1.0.0-pre.44",
-    "typescript": "3.8.3"
+    "ts-node-dev": "1.0.0-pre.44"
   },
   "dependencies": {
+    "@types/node": "^14.0.1",
     "core-js": "3",
-    "eris-boiler": "^3.0.0"
+    "docker-secret-env": "^0.2.1",
+    "eris-boiler": "^3.0.0",
+    "knex": "^0.21.1",
+    "moment": "^2.25.3",
+    "pg": "^8.2.1",
+    "simple-knex": "^1.0.0-beta.5",
+    "ts-node": "^8.10.1",
+    "typescript": "^3.9.2"
   },
   "keywords": [],
   "description": ""

@@ -8,8 +8,6 @@ COPY knexfile.js .
 COPY package.json .
 COPY tsconfig.json .
 
-RUN ls /usr/app/pinny
-
 FROM alpine
 
 WORKDIR /pinny
@@ -21,6 +19,6 @@ RUN apk add --update nodejs npm git
 ENV NODE_ENV=production
 
 RUN npm install
-RUN npm run stage:build
+RUN npm run build
 
 CMD [ "npm", "start" ]
