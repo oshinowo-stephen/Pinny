@@ -19,7 +19,7 @@ export default class Pinny extends DataClient {
 
 const connectionInfo = {
   user: process.env.DB_USER ?? 'INVALID_DB_USER',
-  host: process.env.DB_HOST ?? '127.0.0.1',
+  host: process.env.DB_HOST ?? '0.0.0.0',
   password: process.env.DB_PASS ?? 'INVALID_DB_PASS',
   database: process.env.DB_NAME ?? 'INVALID_DB_NAME'
 }

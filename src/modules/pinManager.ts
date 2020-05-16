@@ -6,6 +6,7 @@ interface PinnedMessage {
   message: string
   pinnedAt: number
   pinnedIn: string
+  reason: string
 }
 
 export default class PinManager {
@@ -51,7 +52,8 @@ export default class PinManager {
         message: {
           message: query.get('id'),
           pinnedAt: query.get('pinnedAt'),
-          pinnedIn: query.get('pinnedIn')
+          pinnedIn: query.get('pinnedIn'),
+          reason: query.get('reason')
         }
       }
     }
@@ -62,7 +64,7 @@ export default class PinManager {
     }
   }
 
-  async pinMessage (channel: GuildTextableChannel, message: string): PinResult<PinnedMessage> {
+  async pinMessage (channel: GuildTextableChannel, message: string, reason?: string): PinResult<PinnedMessage> {
     const newPin = await this.client.dbm.newObject('pins', {
       id: message,
       pinnedIn: channel.id,
@@ -75,7 +77,9 @@ export default class PinManager {
 
     return {
       succeeded: true,
-      message: 'message pinned'
+      message: reason !== undefined
+        ? reason
+        : 'invalid-reason'
     }
   }
 }

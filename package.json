@@ -24,6 +24,7 @@
     "eslint-plugin-promise": "4.2.1",
     "eslint-plugin-standard": "4.0.1",
     "knex": "0.21.0",
+    "moment": "^2.25.3",
     "pg": "8.0.2",
     "simple-knex": "1.0.0-beta.5",
     "ts-node": "8.9.0",
