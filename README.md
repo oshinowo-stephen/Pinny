@@ -1,5 +1,9 @@
 # Pinny
 
+[![Build Status](https://travis-ci.com/whoastonic/Pinny.svg?branch=master)](https://travis-ci.com/whoastonic/Pinny)
+[![discord](https://canary.discordapp.com/api/guilds/706565700923162706/widget.png)](https://discord.gg/fyDKtAhW)
+
+
 Pinny, counts as a utility bot that can pin messages! Basically...
 
 ## What can it do?
@@ -29,3 +33,36 @@ Pinny also comes with few other settings like, Pin Log (Logs whenever a pin mess
 * `p!settings thresh 10`
 
 * `p!settings log CHANNEL_ID`
+
+## Running it yourself
+
+Now while being opensource you're free to use this for private use following under the [Apache 2.0 Licence](https://github.com/whoastonic/Pinny/blob/master/LICENSE) please mind if the licence is ever broken by your doing, consenquences will be ahead.
+
+Other than that running this bot is as simple as following these steps:
+
+* Install [Node](https://nodejs.org/en/)
+(go ahead and install the LTS version)
+
+* Installing / using a [database](https://www.youtube.com/watch?v=xaWlS9HtWYw)
+(while I linked you a video on how to setup the postgresql database, others are allowed, if you know what you're doing)
+
+* Installing packages by running `npm install`
+
+* If everything is setup correctly, you can go-ahead and run `npm start` and the bot should launch up nicely
+
+* If you run into an issue please visit the [Discord](https://discord.gg/fyDKtAh) for assistance 😄!
+
+## Contributing
+
+Either by [Pull Requests]() or [Bug Reporting](), these help out a-lot in and out of development!
+
+## External Links
+
+Follow, or leave a tweet... or both...
+> [Twitter](https://twitter.com/whoastonic)
+
+Join! You're always welcomed!
+> [Discord](https://discord.gg/fyDKtAhW)
+
+Come watch me, rage at games! If i'm online that is, if not leave a follow!
+> [Twitch](https://www.twitch.tv/whoastonict)
