@@ -14,11 +14,8 @@ WORKDIR /pinny
 
 COPY --from=builder /usr/app/pinny/ /pinny/
 
-RUN apk add --update nodejs npm git
-
-ENV NODE_ENV=production
+RUN apk add nodejs npm git 
 
 RUN npm install
-RUN npm run build
 
 CMD [ "npm", "start" ]
