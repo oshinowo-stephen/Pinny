@@ -7,6 +7,4 @@ service:
 before_script:
   docker pull imstonic/pinny
 
-script:
-  - npm run build
-  - npm run eslint
+script: npm run eslint
