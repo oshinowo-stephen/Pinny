@@ -29,7 +29,7 @@ export const SQLMOpts = {
   connectionInfo
 }
 
-export const PINNY_TOKEN = process.env.TOKEN ?? 'INVALID_TOKEN'
+export const PINNY_TOKEN = process.env.PINNY_TOKEN ?? 'INVALID_TOKEN'
 export const PINNY_DB_URL = process.env.CONN_STRING ?? 'INVALID_CONN_STRING'
 
 export const pinVip = createGeneric<Pinny>(vip)
