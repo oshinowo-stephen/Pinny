@@ -9,30 +9,43 @@ export default new SettingCommand<Pinny>({
   displayName: 'Pinner Emote',
   setting: 'PinEmote',
   options: {
-    aliases: ['pe'],
+    aliases: ['pe', 'emote'],
     permission: pinVip
   },
   getValue: async (bot, { msg }) => {
-    const pinEmote = await bot.pinManager.getPinSetting(
-      msg.channel.guild.id,
-      'pin_emoji'
-    )
+    const { id: guildID } = msg.channel.guild
 
-    console.log(pinEmote)
+    const {
+      succeeded,
+      message
+    } = await bot.pinSettings.getSetting(guildID, 'pin_emoji')
 
-    return pinEmote
+    return succeeded
+      ? message !== undefined
+        ? message
+        : 'N/A'
+      : 'N/A'
   },
   run: async (bot, { params, msg }) => {
-    if (isEmpty(params) || params.length > 1) {
-      return 'You\'ll need to provide **a** emote'
+    if (!isEmpty(params)) {
+      const { id: guildID } = msg.channel.guild
+
+      const emote = bot.pinUtility
+        .getGuildEmote(guildID, params[0])
+
+      if (emote === undefined) {
+        return 'This emote doesn\'t exist on this server'
+      }
+
+      await bot.pinSettings.setSetting(
+        guildID,
+        'pin_emoji',
+        emote
+      )
+
+      return `Set the pin emote to: ${params[0]}`
     }
 
-    await bot.pinManager.setPinSetting(
-      msg.channel.guild.id,
-      'pin_emoji',
-      params[0]
-    )
-
-    return `New ***Pinner Emote*** set to ${params[0]}`
+    return 'I\'ll need a new emote, to set...'
   }
 })

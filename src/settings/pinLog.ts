@@ -1,6 +1,8 @@
 import { SettingCommand } from 'eris-boiler'
+
 import Pinny from '../modules/pinny'
-import { isEmpty, errorReport } from '../utils/extras'
+
+import { isEmpty } from '../utils/extras'
 
 export default new SettingCommand<Pinny>({
   name: 'pinlog',
@@ -10,30 +12,39 @@ export default new SettingCommand<Pinny>({
   },
   description: 'Sets the pin log for the server',
   displayName: 'Pin Log',
-  getValue: async (bot, { msg: { channel: { guild } } }) => {
-    const pinLog: string = await bot.pinManager.getPinSetting(guild.id, 'pin_log')
+  getValue: async (bot, { msg }) => {
+    const { id: guildID } = msg.channel.guild
 
-    return pinLog === null
-      ? 'N/A'
-      : `<#${pinLog}>`
+    const {
+      succeeded,
+      message
+    } = await bot.pinSettings.getSetting(guildID, 'pin_log')
+
+    return succeeded
+      ? message !== null && message !== undefined
+        ? `<#${message}>`
+        : 'N/A'
+      : 'N/A'
   },
   run: async (bot, { msg, params }) => {
-    if (isEmpty(params) || params.length > 1) {
-      return 'Please provide ***a text channel*** for me...'
+    const { id: guildID } = msg.channel.guild
+
+    if (!isEmpty(params)) {
+      const channel = msg.channel.guild.channels.get(params[0])
+
+      if (channel !== undefined) {
+        await bot.pinSettings.setSetting(
+          guildID,
+          'pin_log',
+          channel.id
+        )
+
+        return `Set pin-logs to channel: <#${params[0]}>`
+      }
+
+      return `No such channel: <#${params[0]}>`
     }
 
-    const channel: string = params[0]
-
-    try {
-      await bot.pinManager.setPinSetting(
-        msg.channel.guild.id,
-        'pin_log',
-        channel
-      )
-    } catch (error) {
-      return errorReport(error)
-    }
-
-    return `Successfully set [ PIN LOG ] to <#${channel}>`
+    return 'I\'ll need a channel in order to set a new pinLog channel!'
   }
 })

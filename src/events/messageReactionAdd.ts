@@ -4,29 +4,33 @@ import Pinny from '../modules/pinny'
 
 export default new DiscordEvent<Pinny>({
   name: 'messageReactionAdd',
-  run: async (bot, message, emoji) => {
-    if (message?.reactions !== undefined) {
-      const emoteThresh = await bot.pinManager.getPinSetting(
-        message.channel.guild.id,
-        'thresh'
-      )
+  run: async (bot, message, emoji): Promise<void> => {
+    if (message.guildID !== undefined) {
+      const guildEmoji = await bot.pinSettings.getSetting(message.guildID, 'pin_emoji')
+      const guildThresh = await bot.pinSettings.getSetting(message.guildID, 'thresh')
+      const guildPinLog = await bot.pinSettings.getSetting(message.guildID, 'pin_log')
 
-      const pinmoji = await bot.pinManager.getPinSetting(
-        message.channel.guild.id,
-        'pin_emoji'
-      )
+      if (guildEmoji.succeeded && guildThresh.succeeded) {
+        const emojiName = guildEmoji.message
+        const thresh = guildThresh.message
 
-      console.log(emoteThresh, pinmoji)
+        if (emojiName !== undefined && thresh !== undefined) {
+          const { name: emote } = emoji
 
-      if (pinmoji === emoji.name) {
-        if (message.reactions[pinmoji].count === emoteThresh) {
-          try {
-            console.log('pinning mesage')
+          if (emote === emojiName && message.reactions[emote].count >= thresh) {
             await bot.pinManager.pinMessage(message.channel, message.id)
-          } catch (error) {
-            console.log(error)
 
-            throw error
+            if (guildPinLog.succeeded && guildPinLog.message !== undefined) {
+              const channel: string = message.channel.id
+
+              await bot.pinUtility.sendToLog(message.channel.guild, {
+                action: 'Message Pinned',
+                reason: 'Threshold reached 🤗',
+                actionedAt: Date.now(),
+                actionedIn: `<#${channel}>`,
+                message: message.content
+              })
+            }
           }
         }
       }

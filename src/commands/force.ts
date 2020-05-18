@@ -1,56 +1,81 @@
 import { GuildCommand } from 'eris-boiler'
 
-import canPin from '../permissions/canPin'
-import Pinny from '../modules/pinny'
-import { isEmpty, errorReport } from '../utils/extras'
+import Pinny, { pinVip } from '../modules/pinny'
+
+import { isEmpty } from '../utils/extras'
 
 export default new GuildCommand<Pinny>({
   name: 'force',
-  description: 'Force pin a message',
+  description: 'Force remove/add a pin message',
   options: {
-    aliases: ['f'],
-    permission: canPin,
+    permission: pinVip,
     subCommands: [
       new GuildCommand<Pinny>({
-        name: 'remove',
-        description: 'Force removes a pinned message, that was pinned by me',
-        options: {
-          permission: canPin,
-          aliases: ['rm']
-        },
+        name: 'add',
+        description: 'Force add a pin message',
         run: async (bot, { msg, params }) => {
-          const pinnedMessage = await bot.dbm.newQuery('pins').get(params[0], 'message')
+          if (!isEmpty(params)) {
+            const guildPinLog = await bot.pinSettings.getSetting(
+              msg.channel.guild.id,
+              'pin_log'
+            )
 
-          if ((isEmpty(params) || params.length > 1) && pinnedMessage === undefined) {
-            return 'Please provide ***a pinned message, from me*** to remove :rage:'
+            const message = msg.channel.messages.get(params[0])
+
+            if (message !== undefined) {
+              await bot.pinManager.pinMessage(msg.channel, message.id)
+
+              if (guildPinLog.succeeded && guildPinLog.message !== undefined) {
+                await bot.pinUtility.sendToLog(msg.channel.guild, {
+                  action: 'Message FORCE Pinned',
+                  actionedAt: Date.now(),
+                  actionedIn: msg.channel.id,
+                  reason: params.slice(1).join(' '),
+                  message: params[0]
+                })
+              }
+
+              return 'Force Pinned'
+            }
+
+            return 'Invalid message from this channel'
           }
 
-          try {
-            await bot.pinManager.removePin(msg.channel, params[0])
-          } catch (error) {
-            return errorReport(error.toString())
-          }
-
-          return `Successfully removed ${params[0]} from my pinned collection...`
+          return 'I\'ll need a message to pin!'
         }
       }),
       new GuildCommand<Pinny>({
-        name: 'add',
-        description: 'Force pins a message',
-        options: {
-          permission: canPin,
-          aliases: ['create', 'new']
-        },
+        name: 'remove',
+        description: 'Force remove a pinned message',
         run: async (bot, { msg, params }) => {
-          const message = msg.channel.messages.get(params[0])
+          if (!isEmpty(params)) {
+            const guildPinLog = await bot.pinSettings.getSetting(
+              msg.channel.guild.id,
+              'pin_log'
+            )
 
-          if (message === undefined) {
-            return 'Invalid message'
+            const message = msg.channel.messages.get(params[0])
+
+            if (message !== undefined) {
+              await bot.pinManager.removePin(msg.channel, message.id)
+
+              if (guildPinLog.succeeded && guildPinLog.message !== undefined) {
+                await bot.pinUtility.sendToLog(msg.channel.guild, {
+                  action: 'Message FORCE Pinned',
+                  actionedAt: Date.now(),
+                  actionedIn: msg.channel.id,
+                  reason: params.slice(1).join(' '),
+                  message: params[0]
+                })
+              }
+
+              return 'Force Removed Pin'
+            }
+
+            return 'Invalid message from this channel'
           }
 
-          await bot.pinManager.pinMessage(msg.channel, params[0])
-
-          return `Successfully force pinned [ ${message.content} ]`
+          return 'I\'ll need a message to pin!'
         }
       })
     ]
