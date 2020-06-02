@@ -17,19 +17,12 @@ export default class Pinny extends DataClient {
   public readonly pinSettings = new PinSettingManager(this)
 }
 
-console.log('DB USER: ', process.env.DB_USER)
-console.log('DB PASS: ', process.env.DB_PASS)
-console.log('ADMIN DB USER: ', process.env.ADMIN_DB_USER)
-console.log('ADMIN DB PASS: ', process.env.ADMIN_DB_PASS)
-
 const connectionInfo = {
   host: process.env.DB_HOST ?? '127.0.0.1',
   user: (process.env.DB_USER ?? process.env.ADMIN_DB_USER) ?? 'INVALID_DB_USER',
   password: (process.env.DB_PASS ?? process.env.ADMIN_DB_PASS) ?? 'INVALID_DB_PASS',
   database: process.env.DB_NAME ?? 'INVALID_DB_NAME'
 }
-
-console.log(connectionInfo)
 
 export const SQLMOpts = {
   client: process.env.DB_CLIENT ?? 'pg',
