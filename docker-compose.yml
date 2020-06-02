@@ -1,7 +1,8 @@
-version: '3.4'
+version: '3.7'
 
 x-common-variables: &common
   NODE_ENV: production
+  DB_HOST: database
   DB_CLIENT: pg
 
 networks:
@@ -25,15 +26,18 @@ services:
           memory: 128M
         limits:
           memory: 256M
-    environment: 
-      POSTGRES_PASSWORD: ${ADMIN_DB_PASS}
-      POSTGRES_USER: ${ADMIN_DB_USER}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       -
         type: bind
         source: ~/docker/volumes/postgres
         target: /usr/lib/postgresql/data
+    secrets:
+      - ADMIN_DB_USER
+      - ADMIN_DB_PASS
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/ADMIN_DB_PASS
+      POSTGRES_USER_FILE: /run/secrets/ADMIN_DB_USER
     ports:
       - 5432:5432
     networks: 
@@ -44,15 +48,11 @@ services:
       replicas: 1
     environment:
       <<: *common
-      DB_NAME: pinny
-      DB_PASS: pinpass   
-      DB_USER: pinnybot
+      DB_NAME: postgres
     secrets:
-      - ADMIN_DB_PASS
       - ADMIN_DB_USER
-      -
-        source: PINNY_TOKEN
-        target: DISCORD_TOKEN
+      - ADMIN_DB_PASS
+      - PINNY_TOKEN
     depends_on: 
       - database
     build: .

@@ -7,7 +7,7 @@ import {
 
 import { DataClient } from 'eris-boiler'
 
-import PinManager from './pinManager'
+import { PinManager } from './pinManager'
 import PinUtilityManager from './pinUtilities'
 import PinSettingManager from './pinSettingsManager'
 
@@ -18,9 +18,9 @@ export default class Pinny extends DataClient {
 }
 
 const connectionInfo = {
-  user: process.env.DB_USER ?? 'INVALID_DB_USER',
-  host: process.env.DB_HOST ?? '0.0.0.0',
-  password: process.env.DB_PASS ?? 'INVALID_DB_PASS',
+  host: process.env.DB_HOST ?? '127.0.0.1',
+  user: (process.env.DB_USER ?? process.env.ADMIN_DB_USER) ?? 'INVALID_DB_USER',
+  password: (process.env.DB_PASS ?? process.env.ADMIN_DB_PASS) ?? 'INVALID_DB_PASS',
   database: process.env.DB_NAME ?? 'INVALID_DB_NAME'
 }
 

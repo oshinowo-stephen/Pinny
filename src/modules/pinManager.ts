@@ -9,14 +9,14 @@ interface PinnedMessage {
   reason: string
 }
 
-export default class PinManager {
+export class PinManager {
   client: Pinny
 
   constructor (client: Pinny) {
     this.client = client
   }
 
-  async removePin (channel: GuildTextableChannel, message: string, reason?: string): PinResult<string> {
+  async removePin (channel: GuildTextableChannel, message: string, reason?: string): Promise<PinResult<string>> {
     const result = {
       succeeded: false,
       message: 'Invalid Error'
@@ -43,7 +43,7 @@ export default class PinManager {
     return result
   }
 
-  async getPinMessage (message: string): PinResult<PinnedMessage> {
+  async getPinMessage (message: string): Promise<PinResult<PinnedMessage>> {
     const query = await this.client.dbm.newQuery('pins').get(message)
 
     if (query !== undefined) {
@@ -64,7 +64,7 @@ export default class PinManager {
     }
   }
 
-  async pinMessage (channel: GuildTextableChannel, message: string, reason?: string): PinResult<PinnedMessage> {
+  async pinMessage (channel: GuildTextableChannel, message: string, reason?: string): Promise<PinResult<string>> {
     const newPin = await this.client.dbm.newObject('pins', {
       id: message,
       pinnedIn: channel.id,

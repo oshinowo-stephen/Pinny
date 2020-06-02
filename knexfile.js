@@ -5,11 +5,11 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const {
-  DB_CLIENT,
+  DB_HOST,
   DB_NAME,
   DB_USER,
   DB_PASS,
-  DB_HOST,
+  DB_CLIENT,
   ADMIN_DB_USER,
   ADMIN_DB_PASS
 } = process.env

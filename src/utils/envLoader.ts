@@ -1,12 +1,12 @@
 import { join } from 'path'
-import { load } from 'docker-secret-env'
+import { load as loadDockerSecrets } from 'docker-secret-env'
 import { config, DotenvConfigOutput } from 'dotenv'
 
 const loader = (): DotenvConfigOutput | void => {
-  if (process.env.NODE_ENV === 'production') {
-    return load()
-  } else {
+  if (process.env.NODE_ENV !== 'production') {
     return config({ path: join(__dirname, '../../.env') })
+  } else {
+    return loadDockerSecrets()
   }
 }
 
