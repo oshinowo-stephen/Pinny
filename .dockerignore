@@ -1,0 +1,7 @@
+.*
+Dockerfile
+dist
+node_modules
+assets
+renovate.json
+*.yml

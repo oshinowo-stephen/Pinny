@@ -7,7 +7,7 @@ import {
 
 import { DataClient } from 'eris-boiler'
 
-import PinManager from './pinManager'
+import { PinManager } from './pinManager'
 import PinUtilityManager from './pinUtilities'
 import PinSettingManager from './pinSettingsManager'
 

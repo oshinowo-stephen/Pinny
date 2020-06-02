@@ -76,6 +76,9 @@ typings/
 # next.js build output
 .next
 
+# editors
+.vscode
+
 # nuxt.js build output
 .nuxt
 

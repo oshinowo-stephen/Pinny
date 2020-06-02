@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.7'
 
 x-common-variables: &common
   NODE_ENV: production
@@ -33,8 +33,8 @@ services:
         source: ~/docker/volumes/postgres
         target: /usr/lib/postgresql/data
     secrets:
-      - ADMIN_DB_PASS
       - ADMIN_DB_USER
+      - ADMIN_DB_PASS
     environment:
       POSTGRES_PASSWORD_FILE: /run/secrets/ADMIN_DB_PASS
       POSTGRES_USER_FILE: /run/secrets/ADMIN_DB_USER
@@ -43,17 +43,18 @@ services:
     networks: 
       - postgres_database
   pinny:
-    image: imstonic/pinny:latest
+    image: imstonic/pinny
     deploy:
       replicas: 1
     environment:
       <<: *common
       DB_NAME: postgres
     secrets:
-      - ADMIN_DB_PASS
       - ADMIN_DB_USER
+      - ADMIN_DB_PASS
       - PINNY_TOKEN
     depends_on: 
       - database
+    build: .
     networks: 
       - postgres_database
