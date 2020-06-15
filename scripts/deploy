@@ -1,3 +1,5 @@
+#!/bin/env sh
+
 echo "Deploying to the swarm"
 
 sudo docker image prune -a

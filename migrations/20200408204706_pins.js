@@ -11,6 +11,4 @@ exports.up = (knex) => {
   })
 }
 
-exports.down = (knex) => {
-  return knex.schema.dropTable('pins')
-}
+exports.down = (knex) => knex.schema.dropTable('pins')
