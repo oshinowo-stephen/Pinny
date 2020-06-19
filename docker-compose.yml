@@ -15,7 +15,7 @@ secrets:
     external: true
   PINNY_TOKEN:
     external: true
-  
+
 services:
   database:
     image: postgres
@@ -40,7 +40,7 @@ services:
       POSTGRES_USER_FILE: /run/secrets/ADMIN_DB_USER
     ports:
       - 5432:5432
-    networks: 
+    networks:
       - postgres_database
   pinny:
     image: imstonic/pinny
@@ -53,8 +53,7 @@ services:
       - ADMIN_DB_USER
       - ADMIN_DB_PASS
       - PINNY_TOKEN
-    depends_on: 
+    depends_on:
       - database
-    build: .
-    networks: 
+    networks:
       - postgres_database
