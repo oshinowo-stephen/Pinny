@@ -1,7 +1,7 @@
-.*
-Dockerfile
-dist
-node_modules
-assets
-renovate.json
-*.yml
+# .*
+# Dockerfile
+# dist
+# node_modules
+# assets
+# renovate.json
+# *.yml
