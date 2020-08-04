@@ -1,5 +1,0 @@
-language: node
-node: 13
-
-script: 
-  - npm run eslint
