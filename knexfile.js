@@ -4,11 +4,21 @@ if (process.env.NODE_ENV === 'production') {
   require('dotenv').config()
 }
 
+const {
+  DB_HOST,
+  DB_NAME,
+  DB_USER,
+  DB_PASS,
+  DB_CLIENT,
+  ADMIN_DB_PASS,
+  ADMIN_DB_USER,
+} = process.env
+
 const baseConfig = {
-  client: proecess.env.DB_CLIENT ?? 'INVALID_CLIENT',
+  client: DB_CLIENT ?? 'INVALID_CLIENT',
   connection: {
-    host: DB_HOST,
-    database: DB_NAME
+    host: DB_HOST ?? 'localhost',
+    database: DB_NAME ?? 'INVALID_DB_NAME'
   },
   pool: {
     min: 2,
@@ -24,16 +34,16 @@ module.exports = {
     ...baseConfig,
     connection: {
       ...baseConfig.connection,
-      user: ADMIN_DB_USER,
-      password: ADMIN_DB_PASS
+      user: ADMIN_DB_USER ?? 'INVALID_USER',
+      password: ADMIN_DB_PASS ?? 'INVALID_PASS'
     },
   },
   development: {
     ...baseConfig,
     connection: {
       ...baseConfig.connection,
-      user: DB_USER,
-      password: DB_PASS
+      user: DB_USER ?? 'INVALID_USER',
+      password: DB_PASS ?? 'INVALID_PASS'
     },
   },
 }

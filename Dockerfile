@@ -10,7 +10,7 @@ WORKDIR /pinny
 
 COPY --from=builder /usr/app/pinny/ /pinny/
 
-RUN apk add nodejs npm git 
+RUN apk add nodejs npm git
 
 RUN npm install
 

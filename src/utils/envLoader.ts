@@ -1,5 +1,8 @@
 import { join } from 'path'
-import { config, DotenvConfigOutput } from 'dotenv'
+import {
+  config,
+  DotenvConfigOutput,
+} from 'dotenv'
 import { load as loadDockerSecrets } from 'docker-secret-env'
 
 const loader = (): DotenvConfigOutput | void => {

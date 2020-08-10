@@ -1,14 +1,9 @@
 
-exports.up = (knex) => {
-  return knex.schema.createTable('pins', (table) => {
-    table.string('id')
-      .primary()
-      .notNull()
-    table.string('pinnedIn')
-      .notNull()
-    table.bigInteger('pinnedAt')
-      .notNull()
-  })
-}
+exports.up = (knex) => knex.schema.createTable('pins', (t) => {
+  t.string('id').primary().notNull()
+  t.integer('createdAt').notNull()
+  t.string('content').notNull()
+  t.string('channel').notNull()
+})
 
 exports.down = (knex) => knex.schema.dropTable('pins')

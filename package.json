@@ -1,13 +1,13 @@
 {
   "name": "pinny",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "main": "src/index.ts",
   "author": "whoastonic <kingstonicthe1@gmail.com>",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
+    "start": "node build/index.js",
     "eslint": "eslint src --ext ts",
-    "start": "ts-node src/index.ts",
     "migrate": "eris-boiler migrations latest",
     "prestart": "npm run build && npm run migrate"
   },
@@ -36,7 +36,6 @@
     "ts-node": "^8.10.1",
     "typescript": "^3.9.7"
   },
-  "keywords": [],
   "description": "A Discord bot that pins messages",
   "repository": "https://github.com/whoastonic/Pinny.git",
   "private": true
