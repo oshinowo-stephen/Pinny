@@ -49,6 +49,8 @@ export default new SettingCommand<Pinny>({
       if (pinThresh !== undefined) {
         try {
           await bot.pinSettings.setGuildThresh(msg.channel.guild, pinThresh)
+
+          return `Guild Threshold is now at: ${pinThresh}`
         } catch (error) {
           return errorMessage(error)
         }

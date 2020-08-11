@@ -21,7 +21,7 @@ export default new DiscordEvent<Pinny>({
         .getGuildEmote(channel.guild)
 
       if (bot.pinUtils.checkThresh(msg, gEmote, gThresh)) {
-        await bot.pinMessage(
+        await bot.unpinMessage(
           (msg as Message).channel.id,
           (msg as Message).id,
         )

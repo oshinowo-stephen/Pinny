@@ -1,5 +1,4 @@
 import {
-  Role,
   Guild,
   TextableChannel,
 } from 'eris'
@@ -26,9 +25,9 @@ export class PinSettings {
       await settings.save({
         emoji: emote,
       })
+    } else {
+      throw new GuildError('not found')
     }
-
-    throw new GuildError('not found')
   }
 
   public async getGuildEmote (
@@ -57,9 +56,9 @@ export class PinSettings {
 
     if (settings !== undefined) {
       await settings.save({ thresh })
+    } else {
+      throw new GuildError('not found')
     }
-
-    throw new GuildError('not found')
   }
 
   public async getGuildThresh (
@@ -101,9 +100,9 @@ export class PinSettings {
           }
         }
       }
+    } else {
+      throw new GuildError('invalid')
     }
-
-    throw new GuildError('invalid')
   }
 
   public async getPinLog ({
@@ -122,41 +121,6 @@ export class PinSettings {
 
         return channels.get(channelID) as TextableChannel
       }
-    }
-
-    throw new GuildError('invalid')
-  }
-
-  public async setVip (
-    vip: string,
-    g: Guild,
-  ): Promise<void> {
-    const settings = await this.guildQuery.get(g.id)
-
-    if (settings !== undefined) {
-      if (g.roles.has(vip) !== undefined) {
-        await settings.save({ vip })
-      } else {
-        throw new GuildError('invalid role')
-      }
-    }
-
-    throw new GuildError('invalid')
-  }
-
-  public async getVip (
-    { id, roles }: Guild,
-  ): Promise<Role> {
-    const settings = await this.guildQuery.get(id)
-
-    if (settings !== undefined) {
-      const roleID = (await settings.get('vip') as string | undefined)
-
-      if (roleID !== undefined) {
-        return roles.get(roleID) as Role
-      }
-
-      throw new GuildError('vip not set')
     }
 
     throw new GuildError('invalid')

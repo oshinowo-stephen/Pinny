@@ -17,7 +17,7 @@ export class PinManager {
 
   constructor (client: Pinny) {
     this.pinQuery = client.dbm.newQuery('pins')
-    this.pinObject = client.dbm.newObject('pins', null, true)
+    this.pinObject = client.dbm.newObject('pins')
   }
 
   public async createPin ({

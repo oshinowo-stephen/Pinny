@@ -5,12 +5,7 @@ import {
 } from './index'
 
 import {
-  inArray,
-} from '../../utils/'
-
-import {
   Guild,
-  Member,
   Message,
 } from 'eris'
 
@@ -55,8 +50,14 @@ export class PinUtils {
     emote: string,
     thresh: number,
   ): boolean | void {
-    if (msg.reactions[emote] !== undefined) {
-      const reaction = msg.reactions[emote] as Reaction
+    const parsed = /<:([a-z]+:[0-9]+)>/.exec(emote)
+
+    if (parsed === null) {
+      throw new Error('invalid emote')
+    }
+
+    if (msg.reactions[parsed[1]] !== undefined) {
+      const reaction = msg.reactions[parsed[1]] as Reaction
 
       if (reaction.count >= thresh) {
         return true
@@ -64,14 +65,6 @@ export class PinUtils {
         return false
       }
     }
-
-    throw new Error('invalid reaction')
-  }
-
-  public async isVip (g: Guild, m: Member): Promise<boolean> {
-    const vipRole = await this.settings.getVip(g)
-
-    return inArray<string, Array<string>>(m.roles, vipRole.id)
   }
 
 }

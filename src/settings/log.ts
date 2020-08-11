@@ -23,15 +23,19 @@ export default new SettingCommand<Pinny>({
     permission: pinVip,
   },
   getValue: async (bot, { msg: { channel } }) => {
-    const log = await bot.pinSettings.getPinLog(channel.guild)
+    try {
+      const log = await bot.pinSettings.getPinLog(channel.guild)
 
-    return `<#${log.id}>`
+      return `<#${log.id}>`
+    } catch (error) {
+      return 'N/A'
+    }
   },
   run: async (bot, { msg: { channel, author }, params }) => {
     if (!isEmpty(params) || params.length > 1) {
       await bot.pinSettings.setPinLog(channel.guild, params[0])
 
-      return `<#${params[0]}>`
+      return `all logs will now be in: <#${params[0]}>`
     }
 
     return userError(
